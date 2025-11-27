@@ -1,1 +1,0 @@
-display(simulation.interf_signal);
