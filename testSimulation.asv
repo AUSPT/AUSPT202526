@@ -76,36 +76,19 @@ t = (0:num_ir_samples-1) / fs;
 
 %% plot room impulse response
 subplot(1,2,1);
-plot(t, ir_target(1,:), 'b', 'LineWidth', 1.2);
+plot(t, ir(1,:), 'b', 'LineWidth', 1.2);
 
 xlabel("Time (s)");
 ylabel("Amplitude");
-title("Target Impulse Response – Mic 1 [2.41 2.45 1.5]");
+title("Impulse Response – Mic 1 [2.41 2.45 1.5]");
 grid on;
 
 subplot(1,2,2);
-plot(t, ir_target(2,:), 'r', 'LineWidth', 1.2);
+plot(t, ir(2,:), 'r', 'LineWidth', 1.2);
 xlabel("Time (s)");
 ylabel("Amplitude");
-title("Target Impulse Response – Mic 2 [2.49 2.45 1.5]");
+title("Impulse Response – Mic 2 [2.49 2.45 1.5]");
 grid on;
-
-figure;
-subplot(1,2,1);
-plot(t, ir_interf(1,:), 'b', 'LineWidth', 1.2);
-
-xlabel("Time (s)");
-ylabel("Amplitude");
-title("Interference Impulse Response – Mic 1 [2.41 2.45 1.5]");
-grid on;
-
-subplot(1,2,2);
-plot(t, ir_interf(2,:), 'r', 'LineWidth', 1.2);
-xlabel("Time (s)");
-ylabel("Amplitude");
-title("Interference Impulse Response – Mic 2 [2.49 2.45 1.5]");
-grid on;
-
 
 %% plotting room i have no idea why this wont work????
 %h = figure;
@@ -139,22 +122,21 @@ figure;
 
 subplot(2,1,1);
 spectrogram(mic_signals(1,:), 256, 200, 512, fs, 'yaxis');
-title('Mic 1 Spectrogram (Target & Interference)');
+title('Mic 1 Spectrogram');
 
 subplot(2,1,2);
 spectrogram(mic_signals(2,:), 256, 200, 512, fs, 'yaxis');
-title('Mic 2 Spectrogram (Target & Interference)');
+title('Mic 2 Spectrogram');
 
 
 
 %%data file creation, be careful if modifying
 simulation.fs = fs;
 simulation.mic_signals = mic_signals;       
-simulation.target_signal = target_signal;
-simulation.interf_signal = interf_signal;
+simulation.target_signal = target_signal;    
 simulation.ir_target = ir_target;
-simulation.ir_interf = ir_interf;
+simulation.ir_target = ir_interf;
 simulation.mic_positions = mic_positions;    
-simulation.source_positions = [target_positions; interf_position];
+simulation.source_positions = target_positions;
 fname = 'simData.mat';
 save(fname, 'simulation', '-v7.3');
