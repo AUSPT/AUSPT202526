@@ -197,13 +197,15 @@ subplot(5,1,5);
 %soundsc(y,fs);
 spectrogram(y, 256, 200, 512, fs, 'yaxis');
 
+d = designfilt("lowpassfir",PassbandFrequency=155, StopbandFrequency=165,  PassbandRipple=2, StopbandAttenuation=40, SampleRate=fs)
+
 Fpass = 160;
 Lowy = lowpass(mic_signals(1,:)', Fpass, fs);
 
-[b,a] = cheby2(14,30,0.206);
-%[b, a] = butter(66, 150/(fs/2) ,'low');
 
-yfiltered = filter(b,a,mic_signals(1,:)');
+[b, a] = butter(66, 150/(fs/2),'low');
+
+yfiltered = filter(b,a,mic_signals(1,:));
 
 figure;
 
@@ -225,13 +227,13 @@ spectrogram(y2, 256, 200, 512, fs, 'yaxis');
 
 subplot(5,1,4);
 spectrogram(yfiltered, 256, 200, 512, fs, 'yaxis');
-%soundsc(yfiltered,fs);
+
 
 subplot(5,1,5);
-[y5,e5] = ftf(yfiltered,target_signal);
-spectrogram(y5, 256, 200, 512, fs, 'yaxis');
-soundsc(y5,fs);
+[y2,e2] = ftf(Lowy,target_signal);
 
+
+soundsc(yfiltered,fs);
 
 
 
