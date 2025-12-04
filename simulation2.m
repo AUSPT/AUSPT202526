@@ -79,12 +79,10 @@ clean_mix = target_at_mics + interf_at_mics_scaled;
 % condition B: SNR = 5 dB (signal-to-noise ratio)
 % noise type: uncorrelated white gaussian noise (sensor noise)
 
-desired_SNR_dB = 5;
+desired_SNR_dB = 38; % This needs to be changed to 5 but it's VERY loud when adding the noise
 
-% combine and add white gaussian noise - note - this should be set to
-% 'measured' instead of -20, but we can do so later, because it creates a
-% LOT of noise
-raw_mixture = awgn(clean_mix, desired_SNR_dB, -20);
+% combine and add white gaussian noise 
+raw_mixture = awgn(clean_mix, desired_SNR_dB, 'measured');
 % separate the noise for measurement
 noise = raw_mixture - clean_mix;
 
