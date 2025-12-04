@@ -2,8 +2,6 @@
 % this version detects spatial aliasing frequencies (where target ~ interference)
 % with fall-back to delay-and-sum to prevent aliasing
 
-clear; clc; close all;
-
 % Load Simulation Data
 filename = 'output_mixture.wav';
 if ~isfile(filename)
