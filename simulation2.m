@@ -79,14 +79,14 @@ clean_mix = target_at_mics + interf_at_mics_scaled;
 % condition B: SNR = 5 dB (signal-to-noise ratio)
 % noise type: uncorrelated white gaussian noise (sensor noise)
 
-desired_SNR_dB = 15; % This needs to be changed to 5 but it's VERY loud when adding the noise
+desired_SNR_dB = 40; % This needs to be changed to 5 but it's VERY loud when adding the noise
 
 % combine and add white gaussian noise 
 raw_mixture = awgn(clean_mix, desired_SNR_dB, 'measured');
 % separate the noise for measurement
 noise = raw_mixture - clean_mix;
 
-% normalization 
+% normalization to prevent clipping 
 
 max_val = max(abs(raw_mixture(:)));
 if max_val > 0.95
@@ -94,6 +94,14 @@ if max_val > 0.95
     final_mixture = raw_mixture * scaling_factor;  
 else
     final_mixture = raw_mixture;
+end
+
+max_val = max(abs(clean_mix(:)));
+if max_val > 0.95
+    scaling_factor = 0.95 / max_val;
+    clean_mix_final = clean_mix * scaling_factor;  
+else
+    clean_mix_final = clean_mix;
 end
 
 % output and visualization
@@ -133,8 +141,6 @@ title('Mic 2: Interference Component Only (Zoomed In)');
 xlabel('Time (s)'); grid on;
 ylim([-6 6]);
 xlim([0.1 0.2]);
-% save result without noise
-audiowrite('clean_mix.wav', clean_mix, fs);
 
 figure('Name', 'Simulation Results (Both Mics)');
 colororder("reef");
@@ -148,6 +154,9 @@ xlabel('Time (s)'); grid on;
 % save result to wav file
 audiowrite('output_mixture.wav', final_mixture, fs);
 fprintf('Simulation Complete.\nOutput saved to "output_mixture.wav"\n');
+
+% save result without wgn for comparison
+audiowrite('clean_mix.wav', clean_mix_final, fs);
 
 % display calculated metrics
 fprintf('\nSimulation Verification\n');
