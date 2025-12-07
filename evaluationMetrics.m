@@ -1,6 +1,6 @@
 % specify audio files to evaluate
 
-processed_audio_file = 'result_WIENER_GSC.wav'; 
+processed_audio_file = 'result_WIENER_GSC_highnoise.wav'; 
 reference_audio_file = '1272-141231-0012.flac'; 
 
 % output text file for logging

@@ -1,6 +1,7 @@
 % decision-directed wiener filter to remove residual white gaussian noise 
 % load beamformed audio
-input_file = 'result_GSC_zoom_0.wav'; 
+clear all; clc;
+input_file = 'result_GSC.wav'; 
 
 if ~isfile(input_file)
     error('file %s not found. please run simulation2.m then gsc.m first .', input_file);
@@ -35,7 +36,7 @@ noise_pow = mean(abs(Y(:, 1:init_frames)).^2, 2);
 noise_pow = max(noise_pow, 1e-10);
 
 alpha = 0.98;   % smoothing factor (0.98 is standard)
-gain_min = 0.1; % gain floor - can try adjusting this to remove more noise
+gain_min = 0.05 % gain floor - can try adjusting this to remove more noise
 
 % initialize "previous clean estimate" for recursive step
 S_prev_abs_sq = max(abs(Y(:,1)).^2 - noise_pow, 0); 

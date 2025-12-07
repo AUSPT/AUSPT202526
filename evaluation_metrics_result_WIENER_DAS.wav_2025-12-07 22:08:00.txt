@@ -1,0 +1,11 @@
+Evaluation Date: 07-Dec-2025 22:08:01
+File Processed: result_WIENER_DAS.wav
+
+Metrics:
+STOI:  0.5296 (0-1)
+PESQ narrowband:  1.3451 (1-4.5)
+PESQ wideband:  1.0960 (1-4.5)
+ViSQOL:  2.6948 (1-5)
+OSINR: 3.53 dB (Higher is better)
+LSD:   14.40 dB (Lower is better)
+ 

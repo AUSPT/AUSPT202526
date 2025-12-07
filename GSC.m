@@ -19,9 +19,9 @@ mic_locs = [-d/2, d/2];
 theta_target = 90;  % target direction
 
 % stft setup
-win_len = 512;
-overlap = 256;
-fft_len = 512;
+win_len = 1024;
+overlap = round(0.75 * win_len);
+fft_len = 1024;
 
 [s, f, t_stft] = stft(x, fs, 'window', hamming(win_len), 'overlaplength', overlap, 'fftlength', fft_len);
 [num_bins, num_frames, num_mics] = size(s);

@@ -1,0 +1,11 @@
+Evaluation Date: 07-Dec-2025 22:05:31
+File Processed: result_WIENER_MVDR.wav
+
+Metrics:
+STOI:  0.7964 (0-1)
+PESQ narrowband:  2.0836 (1-4.5)
+PESQ wideband:  1.5390 (1-4.5)
+ViSQOL:  2.7979 (1-5)
+OSINR: 12.45 dB (Higher is better)
+LSD:   12.84 dB (Lower is better)
+ 
