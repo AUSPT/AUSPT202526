@@ -99,7 +99,7 @@ end
 % output and visualization
 t = (0:N-1)/fs;
 
-figure('Name', 'Simulation Results');
+figure('Name', 'Simulation Results (Mic 1)');
 subplot(3,1,1);
 plot(t, final_mixture(:,1));
 title('Mic 1: Final Mixture (Target + Interference + Noise)');
@@ -112,7 +112,37 @@ xlabel('Time (s)'); grid on;
 
 subplot(3,1,3);
 plot(t, interf_at_mics_scaled(:,1));
-title('Mic 1: Interference Component Only');
+title('Mic 1: Interference Component Only (Zoomed In)');
+xlabel('Time (s)'); grid on;
+ylim([-6 6]);
+xlim([0.1 0.2]);
+figure('Name', 'Simulation Results (Mic 2)');
+subplot(3,1,1);
+plot(t, final_mixture(:,2));
+title('Mic 2: Final Mixture (Target + Interference + Noise)');
+xlabel('Time (s)'); grid on;
+
+subplot(3,1,2);
+plot(t, target_at_mics(:,2));
+title('Mic 2: Target Component Only');
+xlabel('Time (s)'); grid on;
+
+subplot(3,1,3);
+plot(t, interf_at_mics_scaled(:,2));
+title('Mic 2: Interference Component Only (Zoomed In)');
+xlabel('Time (s)'); grid on;
+ylim([-6 6]);
+xlim([0.1 0.2]);
+% save result without noise
+audiowrite('clean_mix.wav', clean_mix, fs);
+
+figure('Name', 'Simulation Results (Both Mics)');
+colororder("reef");
+plot(t, final_mixture(:,1));
+hold on;
+plot(t, final_mixture(:,2));
+title('Final Mixture (Target + Interference + Noise)');
+legend('Mic 1', 'Mic 2');
 xlabel('Time (s)'); grid on;
 
 % save result to wav file
