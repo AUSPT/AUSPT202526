@@ -221,6 +221,7 @@ fprintf('final audio saved to processed_signal.wav\n');
 
 % Run evaluation metrics
 evaluationMetrics(processed_signal, fs);
+fprintf('Try reducing the variable snr for the White Gaussian Noise SNR dB to see if there are improvements to the metrics')
 
 % function to calculate echoic room impulse response
 function rir = roomImpulseResponse(src_pos, mic_pos, room_dim, beta, c, fs, order)

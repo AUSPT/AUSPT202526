@@ -79,21 +79,23 @@ clean_mix = target_at_mics + interf_at_mics_scaled;
 % condition B: SNR = 5 dB (signal-to-noise ratio)
 % noise type: uncorrelated white gaussian noise (sensor noise)
 
-desired_SNR_dB = 5; % This needs to be changed to 5 but it's VERY loud when adding the noise
-
-% combine and add white gaussian noise 
-raw_mixture = awgn(clean_mix, desired_SNR_dB, 'measured');
-% separate the noise for measurement
+% add different levels of WGN
+% add white gaussian noise with snr 5
+snr = 5;
+raw_mixture = awgn(clean_mix, snr, 'measured');
+snr10 = awgn(clean_mix, 10, 'measured');
+snr20 = awgn(clean_mix, 20, 'measured');
+snr40 = awgn(clean_mix, 40, 'measured');
+snr60 = awgn(clean_mix, 60, 'measured');
 noise = raw_mixture - clean_mix;
 
-% normalization to prevent clipping 
-
+% normalise to prevent clipping
 max_val = max(abs(raw_mixture(:)));
 if max_val > 0.95
     scaling_factor = 0.95 / max_val;
-    final_mixture = raw_mixture * scaling_factor;  
+    mixture_signal = raw_mixture * scaling_factor;  
 else
-    final_mixture = raw_mixture;
+    mixture_signal = raw_mixture;
 end
 
 max_val = max(abs(clean_mix(:)));
@@ -102,6 +104,38 @@ if max_val > 0.95
     clean_mix_final = clean_mix * scaling_factor;  
 else
     clean_mix_final = clean_mix;
+end
+
+max_val = max(abs(snr10(:)));
+if max_val > 0.95
+    scaling_factor = 0.95 / max_val;
+    snr10_final = snr10 * scaling_factor;  
+else
+    snr10_final = snr10;
+end
+
+max_val = max(abs(snr20(:)));
+if max_val > 0.95
+    scaling_factor = 0.95 / max_val;
+    snr20_final = snr20 * scaling_factor;  
+else
+    snr20_final = snr20;
+end
+
+max_val = max(abs(snr40(:)));
+if max_val > 0.95
+    scaling_factor = 0.95 / max_val;
+    snr40_final = snr40 * scaling_factor;  
+else
+    snr40_final = snr40;
+end
+
+max_val = max(abs(snr60(:)));
+if max_val > 0.95
+    scaling_factor = 0.95 / max_val;
+    snr60_final = snr60 * scaling_factor;  
+else
+    snr60_final = snr60;
 end
 
 % output and visualization
@@ -151,21 +185,37 @@ title('Final Mixture (Target + Interference + Noise)');
 legend('Mic 1', 'Mic 2');
 xlabel('Time (s)'); grid on;
 
-% save result to wav file
-audiowrite('output_mixture.wav', final_mixture, fs);
-fprintf('\nOutput saved to "output_mixture.wav" and "clean_mix.wav"\n');
-
+% play/save
+audiowrite('mixture_signal.wav', mixture_signal, fs);
+audiowrite('mixture_signal_10_snr.wav', snr10_final, fs);
+audiowrite('mixture_signal_20_snr.wav', snr20_final, fs);
+audiowrite('mixture_signal_40_snr.wav', snr40_final, fs);
+audiowrite('mixture_signal_60_snr.wav', snr60_final, fs);
 % save result without wgn for comparison
 audiowrite('clean_mix.wav', clean_mix_final, fs);
 
+fprintf('saved audio as mixture_signal.wav, mixture_signal_10_snr.wav, mixture_signal_20_snr.wav, mixture_signal_40_snr.wav, mixture_signal_60_snr.wav, clean_mix.wav\n');
 % display calculated metrics
 fprintf('\nSimulation Verification\n');
 actual_SIR = 10*log10(mean(rms(target_at_mics).^2) / mean(rms(interf_at_mics_scaled).^2));
 actual_SNR = 10*log10(mean(rms(clean_mix).^2) / mean(rms(noise).^2));
 fprintf('Target SIR (should be ~0 dB): %.2f dB\n', actual_SIR);
 fprintf('Target SNR (should be ~5 dB): %.2f dB\n', actual_SNR);
+% Beamform
+filtered_signal_GSC = GSC(mixture_signal, fs);
+audiowrite('GSC_filtered.wav', filtered_signal_GSC, fs);
 
+% Reduce WG noise with Wiener filter
+processed_signal = wiener(filtered_signal_GSC, fs);
 
+% Save final result
+audiowrite('processed_signal.wav', processed_signal, fs);
+fprintf('final audio saved to processed_signal.wav\n');
+
+% Run evaluation metrics
+evaluationMetrics(processed_signal, fs);
+
+fprintf('Try reducing the variable snr for the White Gaussian Noise SNR dB to see the improvements to the metrics')
 % helper Function: anechoic propagation
 function mic_signals = simulate_propagation(src_sig, src_pos, mic_pos, fs, c)
     

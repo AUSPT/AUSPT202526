@@ -184,35 +184,45 @@ audiowrite('mixture_signal_40_snr.wav', snr40_final, fs);
 audiowrite('mixture_signal_60_snr.wav', snr60_final, fs);
 % save result without wgn for comparison
 audiowrite('clean_mix.wav', clean_mix_final, fs);
-clc;
+
 fprintf('saved audio as mixture_signal.wav, mixture_signal_10_snr.wav, mixture_signal_20_snr.wav, mixture_signal_40_snr.wav, mixture_signal_60_snr.wav, clean_mix.wav\n');
 
 % Beamform
 filtered_signal_GSC = GSC(mixture_signal, fs);
 audiowrite('GSC_filtered.wav', filtered_signal_GSC, fs);
-DL_factor = 0.1;
-[filtered_signal_LCMV, w] = lcmv_beamformer(mixture_signal,fs, mic_pos, src_target_pos, c, DL_factor);
 % Frost Beamformer (Broadband LCMV)
 mic_pos_toolbox = mic_pos; 
 
 target_angle = 90; % Azimuth
 
-[cleaned_audio, w] = apply_frost_beamformer(mixture_signal, fs, mic_pos_toolbox, target_angle);
+[filtered_signal_FROST, w] = apply_frost_beamformer(mixture_signal, fs, mic_pos_toolbox, target_angle);
 
-figure('Name', 'Beamforming Results');
+figure('Name', 'FROST Beamforming Results');
 subplot(2,1,1);
 plot(mixture_signal(:,1));
 title('Noisy Reverberant Input (Mic 1)');
 grid on;
 
 subplot(2,1,2);
-plot(cleaned_audio);
+plot(filtered_signal_FROST);
 title('Beamformed Output (Frost with Diagonal Loading)');
 grid on;
 
-% Save result
-audiowrite('result_FROST.wav', cleaned_audio, fs);
+% Save FROST result
+audiowrite('result_FROST.wav', filtered_signal_FROST, fs);
 fprintf('audio saved to result_FROST.wav\n');
+
+% Reduce WG noise with Wiener filter
+processed_signal = wiener(filtered_signal_GSC, fs);
+
+% Save final result
+audiowrite('processed_signal.wav', processed_signal, fs);
+fprintf('final audio saved to processed_signal.wav\n');
+
+% Run evaluation metrics
+evaluationMetrics(processed_signal, fs);
+fprintf('Try reducing the variable snr for the White Gaussian Noise SNR dB to see the improvements to the metrics')
+
 % function to calculate echoic room impulse response
 function rir = roomImpulseResponse(src_pos, mic_pos, room_dim, beta, c, fs, order)
     % inputs:
