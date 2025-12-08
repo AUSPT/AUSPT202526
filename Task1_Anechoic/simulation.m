@@ -153,7 +153,7 @@ xlabel('Time (s)'); grid on;
 
 % save result to wav file
 audiowrite('output_mixture.wav', final_mixture, fs);
-fprintf('Simulation Complete.\nOutput saved to "output_mixture.wav"\n');
+fprintf('\nOutput saved to "output_mixture.wav" and "clean_mix.wav"\n');
 
 % save result without wgn for comparison
 audiowrite('clean_mix.wav', clean_mix_final, fs);
