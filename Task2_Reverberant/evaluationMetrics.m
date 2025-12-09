@@ -3,7 +3,7 @@ function metrics = evaluationMetrics(sig_proc, fs_p)
     reference_audio_file = 'target_signal.flac'; 
     
     % output text file for logging
-    dt = datetime("now", 'Format', 'yyyy-MM-dd HH:mm:ss');
+    dt = datetime("now", 'Format', 'yyyy-MM-dd HH-mm-ss');
     log_file = strcat('evaluation_metrics_', string(dt), '.txt');
     
     [sig_ref, fs_r] = audioread(reference_audio_file);
