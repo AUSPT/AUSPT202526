@@ -139,7 +139,7 @@ else
 end
 
 % play mixture
-fprintf('Playing mixture')
+fprintf('Playing mixture with 5 dB SNR - Careful of Volume!')
 player1 = audioplayer(mixture_signal, fs);
 playblocking(player1);
 % output and visualization

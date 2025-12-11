@@ -2,7 +2,7 @@
 % simulates reverberation by calculating reflections explicitly
 % without using the audio toolbox 'acousticRoomResponse' function for
 % paedagogical purposes
-clc; clear all; 
+clc; clear all; % In case anything remains from task 1
 % simulation parameters
 c = 340;                    % speed of sound (m/s)
 fs = 16000;                 % sampling rate (hz)
@@ -185,7 +185,7 @@ audiowrite('mixture_signal_60_snr.wav', snr60_final, fs);
 % save result without wgn for comparison
 audiowrite('clean_mix.wav', clean_mix_final, fs);
 % play mixture
-fprintf('Playing mixture')
+fprintf('Playing mixture with 5 dB SNR - Careful of Volume!')
 player1 = audioplayer(mixture_signal, fs);
 playblocking(player1);
 fprintf('saved audio as mixture_signal.wav, mixture_signal_10_snr.wav, mixture_signal_20_snr.wav, mixture_signal_40_snr.wav, mixture_signal_60_snr.wav, clean_mix.wav\n');
