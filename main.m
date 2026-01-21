@@ -37,8 +37,8 @@ end
 
 % stftTargetDir = "C:\Users\tjmik\OneDrive\Desktop\2025\Signal Processing Cup\AUSPT202526\stft_cleanaudio";
 % 
-% outXgscDir = fullfile(baseOut, "Xgsc");
-% outMaskDir = fullfile(baseOut, "YMask");
+outXgscDir = fullfile(baseOut, "Xgsc");
+outMaskDir = fullfile(baseOut, "YMask");
 % 
 % 
 % if isempty(dir(fullfile(outXgscDir,"Xgsc_*.mat"))) || isempty(dir(fullfile(outMaskDir,"Ymask_*.mat")))
